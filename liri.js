@@ -1,10 +1,10 @@
 require("dotenv").config();
 
 var keys = require("../liri-node-app.github.io/key.js");
-var request = require('request');
-var Twitter = require('twitter');
-var Spotify = require('node-spotify-api');
-var fs = require('fs');
+var request = require("request");
+var Twitter = require("twitter");
+var Spotify = require("node-spotify-api");
+var fs = require("fs");
 var spotify = new Spotify(keys.spotify);
 var client = new Twitter(keys.twitter);
 var input = process.argv;
@@ -17,7 +17,7 @@ switch (action) {
 	break;
 
 	case "spotify-this-song":
-	spotify(inputs);
+	spotifyfunc(inputs);
 	break;
 
 	case "movie-this":
@@ -32,7 +32,7 @@ switch (action) {
 function twitter(inputs) {
 	var params = {screen_name: inputs, count: 20};
 	
-		client.get('statuses/user_timeline', params, function(error, tweets, response) {
+		client.get("statuses/user_timeline", params, function(error, tweets, response) {
 			if (!error) {
 				for (i = 0; i < tweets.length; i ++){
 					console.log("Tweet: " + "'" + tweets[i].text + "'" + " Created At: " + tweets[i].created_at);
@@ -44,15 +44,15 @@ function twitter(inputs) {
 
 }
 
-function spotify(inputs) {
+function spotifyfunc(inputs) {
 
 	var spotify = new Spotify(keys.spotify);
 		if (!inputs){
-        	inputs = 'Cicatriz Esp';
+        	inputs = "Cicatriz Esp";
     	}
-		spotify.search({ type: 'track', query: inputs }, function(err, data) {
+		spotify.search({ type: "track", query: inputs }, function(err, data) {
 			if (err){
-	            console.log('Error occurred: ' + err);
+	            console.log("Error occurred: " + err);
 	            return;
 	        }
 
@@ -66,15 +66,15 @@ function spotify(inputs) {
 
 
 function movie(inputs) {
+	if (!inputs){
+		inputs = "Mr.Nobody";
+	}
 
-	var queryUrl = "http://www.omdbapi.com/?t=" + inputs + "&y=&plot=short&apikey=40e9cece";
-
+	var queryUrl = "http://www.omdbapi.com/?t=" + inputs + "&y=&plot=short&apikey=trilogy";
+	console.log(inputs);
 	request(queryUrl, function(error, response, body) {
-		if (!inputs){
-        	inputs = "Birdman";
-    	}
+		
 		if (!error && response.statusCode === 200) {
-
 		    console.log("Title: " + JSON.parse(body).Title);
 		    console.log("Release Year: " + JSON.parse(body).Year);
 		    console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
